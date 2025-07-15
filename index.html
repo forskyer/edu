@@ -156,37 +156,42 @@
           ]
         };
       },
-      methods: {
-        toggleLang() {
-          this.lang = this.lang === 'en' ? 'zh' : 'en';
-          this.loadMarkdown(); // 切换语言时，重新加载 Markdown
-        },
-        t(key) {
-          return messages[this.lang][key] || key;
-        },
-        openModal(index) {
-          this.activeProject = index;
-        },
-        loadMarkdown() {
-          fetch(`reflection_${this.lang}.md`)
-            .then(res => res.text())
-            .then(md => {
-              document.getElementById('reflection-content').innerHTML = marked.parse(md);
-            });
-          fetch(`vision_${this.lang}.md`)
-            .then(res => res.text())
-            .then(md => {
-              document.getElementById('vision-content').innerHTML = marked.parse(md);
-            });
-        }
-      },
-      mounted() {
-        fetch('projects.json')
-          .then(res => res.json())
-          .then(data => { this.projects = data; });
+     methods: {
+  toggleLang() {
+    this.lang = this.lang === 'en' ? 'zh' : 'en';
+    this.loadMarkdown();
+  },
+  t(key) {
+    return messages[this.lang][key] || key;
+  },
+  openModal(index) {
+    this.activeProject = index;
+  },
+  loadMarkdown() {
+    const safeMarkdown = (md) => {
+      const container = document.createElement('div');
+      container.innerHTML = marked.parse(md);
+      // 移除潜在的 script/style 标签（防止破坏页面）
+      container.querySelectorAll('script, style').forEach(el => el.remove());
+      return container.innerHTML;
+    };
 
-        this.loadMarkdown();
-      }
+    // 加载反思
+    fetch(`reflection_${this.lang}.md`)
+      .then(res => res.text())
+      .then(md => {
+        document.getElementById('reflection-content').innerHTML = safeMarkdown(md);
+      });
+
+    // 加载愿景
+    fetch(`vision_${this.lang}.md`)
+      .then(res => res.text())
+      .then(md => {
+        document.getElementById('vision-content').innerHTML = safeMarkdown(md);
+      });
+  }
+}
+
     }).mount('#app');
   </script>
 </body>
