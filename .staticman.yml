@@ -1,0 +1,12 @@
+comments:
+  allowedFields: ["name", "message"]
+  requiredFields: ["message"]
+  format: "json"
+  moderation: false
+  path: "data/comments"
+  filename: "comment-:date"
+  generatedFields:
+    date:
+      type: date
+      options:
+        format: "iso8601"
