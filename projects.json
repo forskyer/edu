@@ -1,7 +1,7 @@
 [
   {
     "title": "Project A",
-    "image": "https://via.placeholder.com/400x200",
+    "image": "https://p5.itc.cn/images01/20220312/71d94e294f274b179dbe77576173c331.jpeg",
     "desc_en": "Unit on sustainability and environment",
     "desc_zh": "关于环境与可持续的单元",
     "detail_en": "This project helps students explore sustainability topics through Mandarin.",
@@ -9,7 +9,7 @@
   },
   {
     "title": "Project B",
-    "image": "https://via.placeholder.com/400x200",
+    "image": "hhttps://d3rwyinxzcqr6y.cloudfront.net/Assets/res/imgs/creative/25wk25/rhs_1134379719_zh_CN.jpg",
     "desc_en": "Culture & Identity project",
     "desc_zh": "文化与身份探究项目",
     "detail_en": "Students analyze cultural elements and reflect on their identity.",
@@ -24,3 +24,4 @@
     "detail_zh": "结合编程与语言学习，促进学生创意表达。"
   }
 ]
+
