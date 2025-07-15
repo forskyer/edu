@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MR. Fan - 教学档案</title>
+  <style>
+    :root {
+      --primary-color: #6366f1; 
+      --primary-hover: #4f46e5;
+      --secondary-color: #f1f5f9;
+      --accent-color: #10b981;
+      --text-dark: #1e293b;
+      --text-light: #64748b; 
+      --bg-light: #f8fafc;
+      --bg-white: #ffffff;
+      --border-color: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--text-dark);
+      background: var(--bg-light);
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+      color: white;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .lang-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .lang-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    nav {
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      overflow-x: auto;
+    }
+
+    .nav-container {
+      display: flex;
+      gap: 0.5rem;
+      min-width: max-content;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-light);
+      font-weight: 500;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    nav a:hover {
+      background: var(--secondary-color);
+      color: var(--primary-color);
+      transform: translateY(-1px);
+    }
+
+    nav a.active {
+      background: var(--primary-color);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .page {
+      display: none;
+      background: var(--bg-white);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+    }
+
+    .page.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page h2 {
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .page p {
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+      font-size: 1.1rem;
+    }
+
+    .card {
+      background: var(--secondary-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-left: 4px solid var(--accent-color);
+    }
+
+    .card h3 {
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .skill-tag {
+      display: inline-block;
+      background: var(--accent-color);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin: 0.2rem;
+    }
+
+    .progress-bar {
+      background: var(--secondary-color);
+      border-radius: 10px;
+      height: 8px;
+      margin: 0.5rem 0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.8s ease;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--text-light);
+      background: var(--bg-white);
+      border-top: 1px solid var(--border-color);
+      margin-top: 2rem;
+    }
+
+    .highlight {
+      background: linear-gradient(120deg, var(--accent-color) 0%, var(--accent-color) 100%);
+      background-repeat: no-repeat;
+      background-size: 100% 0.3em;
+      background-position: 0 88%;
+      padding: 0.1em 0;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      header h1 {
+        font-size: 1.5rem;
+      }
+      
+      nav {
+        padding: 1rem;
+      }
+      
+      main {
+        padding: 1rem;
+      }
+      
+      .page {
+        padding: 1.5rem;
+      }
+      
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>教学档案 Teaching Portfolio</h1>
+    <button class="lang-toggle" onclick="toggleLanguage()">🌐 中/En</button>
+  </header>
+  
+  <nav>
+    <div class="nav-container">
+      <a href="#" onclick="showPage('philosophy')" class="active">📜 <span class="zh">理念</span><span class="en">Philosophy</span></a>
+      <a href="#" onclick="showPage('background')">🧑‍🏫 <span class="zh">背景</span><span class="en">Background</span></a>
+      <a href="#" onclick="showPage('evidence')">📂 <span class="zh">成果</span><span class="en">Evidence</span></a>
+      <a href="#" onclick="showPage('reflection')">🧠 <span class="zh">反思</span><span class="en">Reflection</span></a>
+      <a href="#" onclick="showPage('tools')">🧰 <span class="zh">工具</span><span class="en">Tools</span></a>
+      <a href="#" onclick="showPage('feedback')">🗣️ <span class="zh">反馈</span><span class="en">Feedback</span></a>
+      <a href="#" onclick="showPage('development')">📚 <span class="zh">培训</span><span class="en">Development</span></a>
+      <a href="#" onclick="showPage('research')">🌍 <span class="zh">探索</span><span class="en">Research</span></a>
+      <a href="#" onclick="showPage('goals')">🚀 <span class="zh">愿景</span><span class="en">Goals</span></a>
+    </div>
+  </nav>
+  
+  <main>
+    <div id="philosophy" class="page active">
+      <h2><span class="zh">📜 教学理念</span><span class="en">📜 Teaching Philosophy</span></h2>
+      <p class="zh">我相信语言学习不应仅限于课本，而应与<span class="highlight">文化、思维和世界观</span>紧密连接。通过探究式学习，学生能够发现语言背后的深层含义，培养跨文化理解能力。</p>
+      <p class="en">I believe language learning should connect deeply with <span class="highlight">culture, thinking, and worldview</span>—not just textbooks. Through inquiry-based learning, students discover the deeper meanings behind language and develop intercultural understanding.</p>
+      
+      <div class="card">
+        <h3 class="zh">核心教学原则</h3>
+        <h3 class="en">Core Teaching Principles</h3><br>
+        <p class="zh">• 学生为中心的个性化学习<br>• 文化融入语言教学<br>• 批判性思维培养<br>• 多元评估方式</p>
+        <p class="en">• Student-centered personalized learning<br>• Cultural integration in language teaching<br>• Critical thinking development<br>• Diverse assessment methods</p>
+      </div>
+    </div>
+
+    <div id="background" class="page">
+      <h2><span class="zh">🧑‍🏫 教学背景与经验</span><span class="en">🧑‍🏫 Background & Experience</span></h2>
+      <p class="zh">专注于MYP中文教学(Y7-Y10)，深度理解ATLs技能培养、探究式学习设计，并积极参与跨学科项目和SA评估设计。</p>
+      <p class="en">Specializing in MYP Mandarin (Y7-Y10), with deep understanding of ATL skills development, inquiry-based learning design, and active participation in interdisciplinary projects and SA assessment design.</p>
+      
+      <div class="grid">
+        <div class="card">
+          <h3 class="zh">教学经验</h3>
+          <h3 class="en">Teaching Experience</h3><br>
+          <p class="zh">• 5年+ MYP中文教学经验<br>• IB培训认证教师<br>• 跨文化教育专家</p>
+          <p class="en">• 5+ years MYP Mandarin teaching<br>• IB certified educator<br>• Intercultural education specialist</p>
+        </div>
+        <div class="card">
+          <h3 class="zh">专业技能</h3>
+          <h3 class="en">Professional Skills</h3>
+          <div class="zh">
+            <span class="skill-tag">探究式学习</span>
+            <span class="skill-tag">概念性理解</span>
+            <span class="skill-tag">跨文化交流</span>
+            <span class="skill-tag">技术整合</span>
+          </div>
+          <div class="en">
+            <span class="skill-tag">Inquiry Learning</span>
+            <span class="skill-tag">Conceptual Understanding</span>
+            <span class="skill-tag">Intercultural Communication</span>
+            <span class="skill-tag">Technology Integration</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="evidence" class="page">
+      <h2><span class="zh">📂 教学成果展示</span><span class="en">📂 Teaching Evidence</span></h2>
+      <p class="zh">通过多样化的教学策略和创新方法，学生在语言能力、文化理解和批判性思维方面都取得了显著进步。</p>
+      <p class="en">Through diverse teaching strategies and innovative approaches, students have made significant progress in language proficiency, cultural understanding, and critical thinking.</p>
+      
+      <div class="grid">
+        <div class="card">
+          <h3 class="zh">学生成就</h3>
+          <h3 class="en">Student Achievements</h3><br>
+          <p class="zh">• 98%学生达到或超过预期学习目标<br>• 中文演讲比赛多项获奖<br>• 跨文化项目展示优秀作品</p>
+          <p class="en">• 98% students meet or exceed learning objectives<br>• Multiple awards in Chinese speech competitions<br>• Outstanding intercultural project presentations</p>
+        </div>
+        <div class="card">
+          <h3 class="zh">创新教学法</h3>
+          <h3 class="en">Innovative Methods</h3><br>
+          <p class="zh">• 数字化故事创作<br>• 虚拟文化体验<br>• 同伴协作学习<br>• 真实情境模拟</p>
+          <p class="en">• Digital storytelling<br>• Virtual cultural experiences<br>• Peer collaborative learning<br>• Authentic context simulation</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="reflection" class="page">
+      <h2><span class="zh">🧠 教学反思与改进</span><span class="en">🧠 Teaching Reflection</span></h2>
+      <p class="zh">持续的自我反思是教师专业发展的核心。我定期分析教学效果，调整策略，确保每个学生都能得到最适合的学习体验。</p>
+      <p class="en">Continuous self-reflection is at the heart of teacher professional development. I regularly analyze teaching effectiveness and adjust strategies to ensure every student receives the most suitable learning experience.</p>
+      
+      <div class="card">
+        <h3 class="zh">反思重点</h3>
+        <h3 class="en">Reflection Focus</h3><br>
+        <p class="zh">• 学生参与度和学习动机分析<br>• 教学方法有效性评估<br>• 文化敏感性教学实践<br>• 个性化学习支持策略</p>
+        <p class="en">• Student engagement and motivation analysis<br>• Teaching method effectiveness evaluation<br>• Culturally responsive teaching practices<br>• Personalized learning support strategies</p>
+      </div>
+    </div>
+
+    <div id="tools" class="page">
+      <h2><span class="zh">🧰 教学工具与技术</span><span class="en">🧰 Teaching Tools & Technology</span></h2>
+      <p class="zh">合理运用现代技术工具，创造更加互动和个性化的学习环境，提升学生的学习效率和兴趣。</p>
+      <p class="en">Effectively utilizing modern technology tools to create more interactive and personalized learning environments, enhancing student learning efficiency and interest.</p>
+      
+      <div class="grid">
+        <div class="card">
+          <h3 class="zh">数字化工具</h3>
+          <h3 class="en">Digital Tools</h3><br>
+          <p class="zh">• Google Workspace for Education<br>• Flipgrid 视频交流平台<br>• Padlet 协作墙<br>• Kahoot 互动测验</p>
+          <p class="en">• Google Workspace for Education<br>• Flipgrid video communication<br>• Padlet collaboration wall<br>• Kahoot interactive quizzes</p>
+        </div>
+        <div class="card">
+          <h3 class="zh">评估工具</h3>
+          <h3 class="en">Assessment Tools</h3><br>
+          <p class="zh">• ManageBac 学习管理<br>• Rubrics 评分标准<br>• 电子档案袋<br>• 同伴评估系统</p>
+          <p class="en">• ManageBac learning management<br>• Rubrics scoring criteria<br>• Digital portfolios<br>• Peer assessment systems</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="feedback" class="page">
+      <h2><span class="zh">🗣️ 学生与家长反馈</span><span class="en">🗣️ Student & Parent Feedback</span></h2>
+      <p class="zh">收集和分析来自学生、家长和同事的反馈，是我不断改进教学质量的重要依据。</p>
+      <p class="en">Collecting and analyzing feedback from students, parents, and colleagues is crucial for continuously improving teaching quality.</p>
+      
+      <div class="card">
+        <h3 class="zh">反馈亮点</h3>
+        <h3 class="en">Feedback Highlights</h3><br>
+        <p class="zh">"范老师的课堂总是充满活力，让我们在轻松的氛围中学到了很多中国文化知识。" - 学生评价</p>
+        <p class="en">"MR. Fan's classes are always energetic, and we learn so much about Chinese culture in a relaxed atmosphere." - Student feedback</p>
+        <br><br>
+        <p class="zh">"孩子对中文学习的兴趣明显提高，在家也会主动分享课堂学到的内容。" - 家长反馈</p>
+        <p class="en">"My child's interest in Chinese learning has significantly improved, and they actively share classroom content at home." - Parent feedback</p>
+      </div>
+    </div>
+
+    <div id="development" class="page">
+      <h2><span class="zh">📚 专业发展与培训</span><span class="en">📚 Professional Development</span></h2>
+      <p class="zh">致力于终身学习，积极参与各类专业培训和研修活动，保持教育理念和方法的先进性。</p>
+      <p class="en">Committed to lifelong learning, actively participating in various professional training and development activities to maintain advanced educational concepts and methods.</p>
+      
+      <div class="grid">
+        <div class="card">
+          <h3 class="zh">近期培训</h3>
+          <h3 class="en">Recent Training</h3><br>
+          <p class="zh">• IB MYP 语言习得工作坊<br>• 跨文化教育研讨会<br>• 数字化教学技能培训<br>• 学生心理健康支持培训</p>
+          <p class="en">• IB MYP Language Acquisition Workshop<br>• Intercultural Education Seminar<br>• Digital Teaching Skills Training<br>• Student Mental Health Support Training</p>
+        </div>
+        <div class="card">
+          <h3 class="zh">持续学习</h3>
+          <h3 class="en">Continuous Learning</h3><br>
+          <p class="zh">• 教育硕士学位进修<br>• 专业期刊阅读<br>• 教育会议参与<br>• 同行观摩交流</p>
+          <p class="en">• Master's in Education studies<br>• Professional journal reading<br>• Educational conference participation<br>• Peer observation and exchange</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="research" class="page">
+      <h2><span class="zh">🌍 教育研究与探索</span><span class="en">🌍 Educational Research</span></h2>
+      <p class="zh">通过行动研究和课堂实践，探索更有效的中文教学方法，为语言教育领域贡献新的见解。</p>
+      <p class="en">Through action research and classroom practice, exploring more effective Chinese teaching methods and contributing new insights to the field of language education.</p>
+      
+      <div class="card">
+        <h3 class="zh">研究项目</h3>
+        <h3 class="en">Research Projects</h3><br>
+        <p class="zh">• "技术增强的中文文化教学研究"<br>• "MYP学生中文学习动机调查"<br>• "跨文化理解能力评估方法探索"</p>
+        <p class="en">• "Technology-Enhanced Chinese Cultural Teaching Research"<br>• "MYP Student Chinese Learning Motivation Survey"<br>• "Exploring Assessment Methods for Intercultural Understanding"</p>
+      </div>
+    </div>
+
+    <div id="goals" class="page">
+      <h2><span class="zh">🚀 未来目标与愿景</span><span class="en">🚀 Future Goals & Vision</span></h2>
+      <p class="zh">展望未来，我将继续致力于创新教学方法，培养具有全球视野和跨文化能力的学生，为他们的终身学习奠定坚实基础。</p>
+      <p class="en">Looking ahead, I will continue to innovate teaching methods, cultivate students with global perspectives and intercultural competence, and lay a solid foundation for their lifelong learning.</p>
+      
+      <div class="grid">
+        <div class="card">
+          <h3 class="zh">短期目标</h3>
+          <h3 class="en">Short-term Goals</h3><br>
+          <p class="zh">• 完成MYP中文课程改革<br>• 开发数字化学习资源<br>• 建立家校合作平台<br>• 提升学生文化意识</p>
+          <p class="en">• Complete MYP Chinese curriculum reform<br>• Develop digital learning resources<br>• Establish home-school cooperation platform<br>• Enhance student cultural awareness</p>
+        </div>
+        <div class="card">
+          <h3 class="zh">长期愿景</h3>
+          <h3 class="en">Long-term Vision</h3><br>
+          <p class="zh">• 成为中文教育专家<br>• 推广创新教学模式<br>• 培养教育研究能力<br>• 建立教学共同体</p>
+          <p class="en">• Become a Chinese education expert<br>• Promote innovative teaching models<br>• Develop educational research capabilities<br>• Build teaching communities</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <footer>
+    <p>© 2025 MR.Fan's Teaching Portfolio | <span class="zh">致力于卓越的中文教育</span><span class="en">Committed to Excellence in Chinese Education</span></p>
+  </footer>
+
+  <script>
+    let currentLang = 'zh';
+    
+    function toggleLanguage() {
+      const zhElems = document.querySelectorAll('.zh');
+      const enElems = document.querySelectorAll('.en');
+      
+      if (currentLang === 'zh') {
+        zhElems.forEach(el => el.style.display = 'none');
+        enElems.forEach(el => el.style.display = 'inline');
+        currentLang = 'en';
+      } else {
+        enElems.forEach(el => el.style.display = 'none');
+        zhElems.forEach(el => el.style.display = 'inline');
+        currentLang = 'zh';
+      }
+    }
+    
+    function showPage(pageId) {
+      // 移除所有页面的active类
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+      
+      // 显示选中的页面
+      document.getElementById(pageId).classList.add('active');
+      
+      // 更新导航样式
+      document.querySelectorAll('nav a').forEach(link => {
+        link.classList.remove('active');
+      });
+      event.target.closest('a').classList.add('active');
+    }
+    
+    // 页面加载时初始化语言显示
+    window.addEventListener('load', function() {
+      document.querySelectorAll('.zh').forEach(el => el.style.display = 'inline');
+      document.querySelectorAll('.en').forEach(el => el.style.display = 'none');
+      
+      // 添加进度条动画
+      setTimeout(() => {
+        document.querySelectorAll('.progress-fill').forEach(bar => {
+          const width = bar.getAttribute('data-width') || '85%';
+          bar.style.width = width;
+        });
+      }, 500);
+    });
+  </script>
+</body>
+</html>
