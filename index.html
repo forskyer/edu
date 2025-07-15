@@ -156,7 +156,7 @@
           ]
         };
       },
-     methods: {
+      methods: {
   toggleLang() {
     this.lang = this.lang === 'en' ? 'zh' : 'en';
     this.loadMarkdown();
@@ -191,7 +191,13 @@
       });
   }
 }
+      mounted() {
+        fetch('projects.json')
+          .then(res => res.json())
+          .then(data => { this.projects = data; });
 
+        this.loadMarkdown();
+      }
     }).mount('#app');
   </script>
 </body>
