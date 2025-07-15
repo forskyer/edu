@@ -29,7 +29,7 @@
     <main class="pt-28 max-w-6xl mx-auto px-4 space-y-12">
       <!-- 个人简介 -->
       <section id="about" class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
-        <img src="https://www.fanbk.com/one/?/images/2025/07/15/G4QONerL2A/20221021_161843.jpg" class="rounded-full w-32 h-32 shadow" />
+        <img src="https://www.fanbk.com/one/?/images/2025/07/15/G4QONerL2A/20221021_161843.jpg" class="rounded-full w-32 h-32 shadow object-cover"/>
         <div>
           <h2 class="text-2xl font-bold">{{ t('about') }}</h2>
           <p>{{ t('aboutText') }}</p>
@@ -39,10 +39,13 @@
       <!-- 教育经历 -->
       <section id="education">
         <h2 class="text-2xl font-bold">{{ t('education') }}</h2>
-        <ul class="list-disc pl-5">
-          <li>{{ t('edu1') }}</li>
-          <li>{{ t('edu2') }}</li>
-        </ul>
+        <div id="education-content" class="bg-white p-4 rounded shadow prose"></div>
+      </section>
+
+          <!-- 专业发展 -->
+      <section id="pd">
+        <h2 class="text-2xl font-bold">{{ t('pd') }}</h2>
+        <div id="pd-content" class="bg-white p-4 rounded shadow prose"></div>
       </section>
 
       <!-- 技能工具 -->
@@ -61,9 +64,9 @@
         <h2 class="text-2xl font-bold">{{ t('projects') }}</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div v-for="(project, i) in projects" :key="i" class="bg-white p-4 rounded shadow">
-            <img :src="project.image" class="rounded" />
+            <img :src="project.image" class="rounded object-cover h-48 w-full" />
             <h3 class="text-lg font-semibold mt-2">{{ project.title }}</h3>
-            <p>{{ project['desc_' + lang] }}</p>
+            <p class="line-clamp-3">{{ project['desc_' + lang] }}</p>
             <button @click="openModal(i)" class="text-emerald-600 underline mt-1">{{ t('details') }}</button>
           </div>
         </div>
@@ -156,7 +159,7 @@
           ]
         };
       },
-      methods: {
+methods: {
   toggleLang() {
     this.lang = this.lang === 'en' ? 'zh' : 'en';
     this.loadMarkdown();
@@ -171,33 +174,35 @@
     const safeMarkdown = (md) => {
       const container = document.createElement('div');
       container.innerHTML = marked.parse(md);
-      // 移除潜在的 script/style 标签（防止破坏页面）
       container.querySelectorAll('script, style').forEach(el => el.remove());
       return container.innerHTML;
     };
 
-    // 加载反思
-    fetch(`reflection_${this.lang}.md`)
-      .then(res => res.text())
-      .then(md => {
-        document.getElementById('reflection-content').innerHTML = safeMarkdown(md);
-      });
+    // 加载各模块的 markdown
+    const files = {
+      reflection: `reflection_${this.lang}.md`,
+      vision: `vision_${this.lang}.md`,
+      pd: `pd_${this.lang}.md`,
+      education: `education_${this.lang}.md`,
+    };
 
-    // 加载愿景
-    fetch(`vision_${this.lang}.md`)
-      .then(res => res.text())
-      .then(md => {
-        document.getElementById('vision-content').innerHTML = safeMarkdown(md);
-      });
+    for (const [section, path] of Object.entries(files)) {
+      fetch(path)
+        .then(res => res.ok ? res.text() : Promise.resolve(`_${section} file not found_`))
+        .then(md => {
+          const el = document.getElementById(`${section}-content`);
+          if (el) el.innerHTML = safeMarkdown(md);
+        });
+    }
   }
 },
-      mounted() {
-        fetch('projects.json')
-          .then(res => res.json())
-          .then(data => { this.projects = data; });
+mounted() {
+  fetch('projects.json')
+    .then(res => res.json())
+    .then(data => { this.projects = data; });
 
-        this.loadMarkdown();
-      }
+  this.loadMarkdown();
+}
     }).mount('#app');
   </script>
 </body>
