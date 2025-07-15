@@ -13,7 +13,7 @@
     <!-- 顶部导航栏 -->
     <header class="fixed top-0 w-full bg-emerald-600 text-white shadow z-50">
       <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-        <h1 class="text-xl font-bold">IB Portfolio</h1>
+        <h1 class="text-xl font-bold">Mr Fan's IB Portfolio</h1>
         <nav class="flex flex-wrap gap-3 text-sm items-center">
           <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id" class="hover:underline">
             {{ t(link.label) }}
@@ -155,31 +155,47 @@
           ]
         };
       },
-      methods: {
-        toggleLang() {
-          this.lang = this.lang === 'en' ? 'zh' : 'en';
-        },
-        t(key) {
-          return messages[this.lang][key] || key;
-        },
-        openModal(index) {
-          this.activeProject = index;
-        }
-      },
-      mounted() {
-        fetch('projects.json')
-          .then(res => res.json())
-          .then(data => { this.projects = data; });
+    methods: {
+  // 切换语言，并重新加载 markdown
+  toggleLang() {
+    this.lang = this.lang === 'en' ? 'zh' : 'en';
+    this.loadMarkdown(); // 加载对应语言的反思和愿景内容
+  },
+  // 获取语言对应文本
+  t(key) {
+    return messages[this.lang][key] || key;
+  },
+  // 打开项目详情模态框
+  openModal(index) {
+    this.activeProject = index;
+  },
+  // 根据当前语言加载 Markdown 文件
+  loadMarkdown() {
+    fetch(`reflection_${this.lang}.md`)
+      .then(res => res.text())
+      .then(md => {
+        document.getElementById('reflection-content').innerHTML = marked.parse(md);
+      });
 
-        fetch('reflection.md')
-          .then(res => res.text())
-          .then(md => { document.getElementById('reflection-content').innerHTML = marked.parse(md); });
+    fetch(`vision_${this.lang}.md`)
+      .then(res => res.text())
+      .then(md => {
+        document.getElementById('vision-content').innerHTML = marked.parse(md);
+      });
+  }
+},
+mounted() {
+  // 加载项目卡片 JSON 数据
+  fetch('projects.json')
+    .then(res => res.json())
+    .then(data => {
+      this.projects = data;
+    });
 
-        fetch('vision.md')
-          .then(res => res.text())
-          .then(md => { document.getElementById('vision-content').innerHTML = marked.parse(md); });
-      }
-    }).mount('#app');
+  // 初始化加载默认语言的 markdown
+  this.loadMarkdown();
+}
+
   </script>
 </body>
 </html>
