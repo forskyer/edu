@@ -10,26 +10,24 @@
 </head>
 <body class="bg-emerald-50 text-gray-800">
   <div id="app">
-    <!-- 顶部导航 -->
-    <header class="fixed top-0 left-0 w-full bg-emerald-600 text-white shadow z-50">
+    <!-- 顶部导航栏 -->
+    <header class="fixed top-0 w-full bg-emerald-600 text-white shadow z-50">
       <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
         <h1 class="text-xl font-bold">IB Portfolio</h1>
-        <nav class="space-x-4 text-sm">
-          <a href="#about">{{ t('about') }}</a>
-          <a href="#education">{{ t('education') }}</a>
-          <a href="#skills">{{ t('skills') }}</a>
-          <a href="#projects">{{ t('projects') }}</a>
-          <a href="#pd">{{ t('pd') }}</a>
-          <a href="#reflection">{{ t('reflection') }}</a>
-          <a href="#vision">{{ t('vision') }}</a>
-          <a href="#contact">{{ t('contact') }}</a>
-          <button @click="toggleLang" class="ml-4 underline">{{ lang === 'en' ? '中文' : 'EN' }}</button>
+        <nav class="flex flex-wrap gap-3 text-sm items-center">
+          <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id" class="hover:underline">
+            {{ t(link.label) }}
+          </a>
+          <button @click="toggleLang" class="hover:underline px-2 py-1 border border-white rounded">
+            {{ lang === 'en' ? '中文' : 'EN' }}
+          </button>
         </nav>
       </div>
     </header>
 
+    <!-- 主体内容 -->
     <main class="pt-28 max-w-6xl mx-auto px-4 space-y-12">
-      <!-- About -->
+      <!-- 个人简介 -->
       <section id="about" class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
         <img src="https://via.placeholder.com/150" class="rounded-full w-32 h-32 shadow" />
         <div>
@@ -38,7 +36,7 @@
         </div>
       </section>
 
-      <!-- Education -->
+      <!-- 教育经历 -->
       <section id="education">
         <h2 class="text-2xl font-bold">{{ t('education') }}</h2>
         <ul class="list-disc pl-5">
@@ -47,39 +45,41 @@
         </ul>
       </section>
 
-      <!-- Skills -->
+      <!-- 技能工具 -->
       <section id="skills">
         <h2 class="text-2xl font-bold">{{ t('skills') }}</h2>
-        <p>{{ t('skill1') }}</p>
-        <div class="h-4 bg-gray-200 rounded mb-2"><div class="bg-emerald-500 h-4 w-4/5 rounded"></div></div>
-        <p>{{ t('skill2') }}</p>
-        <div class="h-4 bg-gray-200 rounded"><div class="bg-orange-400 h-4 w-3/4 rounded"></div></div>
+        <div>
+          <p>{{ t('skill1') }}</p>
+          <div class="h-4 bg-gray-200 rounded"><div class="bg-emerald-500 h-4 w-4/5 rounded"></div></div>
+          <p>{{ t('skill2') }}</p>
+          <div class="h-4 bg-gray-200 rounded"><div class="bg-orange-400 h-4 w-3/4 rounded"></div></div>
+        </div>
       </section>
 
-      <!-- Projects -->
+      <!-- 项目展示 -->
       <section id="projects">
         <h2 class="text-2xl font-bold">{{ t('projects') }}</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div v-for="(project, i) in projects" :key="i" class="bg-white p-4 rounded shadow">
             <img :src="project.image" class="rounded" />
-            <h3 class="text-lg font-semibold mt-2">{{ project.title[lang] }}</h3>
-            <p>{{ project.description[lang] }}</p>
+            <h3 class="text-lg font-semibold mt-2">{{ project.title }}</h3>
+            <p>{{ project['desc_' + lang] }}</p>
             <button @click="openModal(i)" class="text-emerald-600 underline mt-1">{{ t('details') }}</button>
           </div>
         </div>
       </section>
 
-      <!-- 项目详情模态框 -->
+      <!-- 模态框 -->
       <div v-if="activeProject !== null" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white max-w-lg p-6 rounded shadow">
-          <h3 class="text-xl font-bold">{{ projects[activeProject].title[lang] }}</h3>
-          <p class="mb-2">{{ projects[activeProject].detail[lang] }}</p>
-          <img :src="projects[activeProject].image" class="my-2 rounded" />
-          <button @click="activeProject = null" class="text-red-600">{{ t('close') }}</button>
+        <div class="bg-white max-w-lg p-6 rounded shadow relative">
+          <button @click="activeProject = null" class="absolute top-2 right-2 text-red-600 text-xl">×</button>
+          <h3 class="text-xl font-bold">{{ projects[activeProject].title }}</h3>
+          <p class="mt-2">{{ projects[activeProject]['detail_' + lang] }}</p>
+          <img :src="projects[activeProject].image" class="my-4 rounded" />
         </div>
       </div>
 
-      <!-- PD -->
+      <!-- 专业发展 -->
       <section id="pd">
         <h2 class="text-2xl font-bold">{{ t('pd') }}</h2>
         <ul class="list-disc pl-5">
@@ -88,19 +88,19 @@
         </ul>
       </section>
 
-      <!-- Reflection -->
+      <!-- 教学反思 -->
       <section id="reflection">
         <h2 class="text-2xl font-bold">{{ t('reflection') }}</h2>
         <div id="reflection-content" class="bg-white p-4 rounded shadow prose"></div>
       </section>
 
-      <!-- Vision -->
+      <!-- 教学愿景 -->
       <section id="vision">
         <h2 class="text-2xl font-bold">{{ t('vision') }}</h2>
         <div id="vision-content" class="bg-white p-4 rounded shadow prose"></div>
       </section>
 
-      <!-- Contact -->
+      <!-- 联系方式 -->
       <section id="contact">
         <h2 class="text-2xl font-bold">{{ t('contact') }}</h2>
         <p>Email: jane@example.com</p>
@@ -110,26 +110,30 @@
     </main>
   </div>
 
-  <!-- Vue + Script -->
   <script>
     const { createApp } = Vue;
-
     const messages = {
       en: {
         about: 'About Me', aboutText: 'IB MYP Mandarin teacher passionate about inquiry.',
         education: 'Education & Experience', edu1: 'M.Ed in International Education', edu2: '5 years in MYP and DP teaching',
         skills: 'Skills & Tools', skill1: 'Curriculum Design', skill2: 'Assessment Strategies',
-        projects: 'Courses & Projects', details: 'Details', close: 'Close',
+        projects: 'Courses & Projects', details: 'Details',
         pd: 'Professional Development', pd1: 'IB Category 2 Workshop - ATL', pd2: 'Global Education Conference 2024',
-        reflection: 'Reflection', vision: 'Vision & Exploration', contact: 'Contact'
+        reflection: 'Reflection', vision: 'Vision & Exploration', contact: 'Contact',
+        aboutNav: 'About', educationNav: 'Education', skillsNav: 'Skills',
+        projectsNav: 'Projects', pdNav: 'PD', reflectionNav: 'Reflection',
+        visionNav: 'Vision', contactNav: 'Contact'
       },
       zh: {
         about: '个人简介', aboutText: 'IB 中学项目中文教师，热衷于探究式学习。',
         education: '教育背景与教学经历', edu1: '国际教育硕士', edu2: '5年MYP和DP教学经验',
         skills: '教学技能与工具', skill1: '课程设计', skill2: '评估策略',
-        projects: '所教课程与项目', details: '详细', close: '关闭',
+        projects: '所教课程与项目', details: '详细',
         pd: '专业成长', pd1: 'IB 第二类工作坊 - ATL', pd2: '2024年全球教育大会',
-        reflection: '教学反思', vision: '探索与愿景', contact: '联系方式'
+        reflection: '教学反思', vision: '探索与愿景', contact: '联系方式',
+        aboutNav: '简介', educationNav: '教育', skillsNav: '技能',
+        projectsNav: '项目', pdNav: '发展', reflectionNav: '反思',
+        visionNav: '愿景', contactNav: '联系'
       }
     };
 
@@ -137,35 +141,43 @@
       data() {
         return {
           lang: 'en',
-          projects: [],
           activeProject: null,
+          projects: [],
+          navLinks: [
+            { id: 'about', label: 'aboutNav' },
+            { id: 'education', label: 'educationNav' },
+            { id: 'skills', label: 'skillsNav' },
+            { id: 'projects', label: 'projectsNav' },
+            { id: 'pd', label: 'pdNav' },
+            { id: 'reflection', label: 'reflectionNav' },
+            { id: 'vision', label: 'visionNav' },
+            { id: 'contact', label: 'contactNav' }
+          ]
         };
       },
       methods: {
         toggleLang() {
           this.lang = this.lang === 'en' ? 'zh' : 'en';
-          this.loadMarkdown();
         },
         t(key) {
           return messages[this.lang][key] || key;
         },
         openModal(index) {
           this.activeProject = index;
-        },
-        loadMarkdown() {
-          fetch(`reflection_${this.lang}.md`)
-            .then(res => res.text())
-            .then(md => document.getElementById('reflection-content').innerHTML = marked.parse(md));
-          fetch(`vision_${this.lang}.md`)
-            .then(res => res.text())
-            .then(md => document.getElementById('vision-content').innerHTML = marked.parse(md));
         }
       },
       mounted() {
         fetch('projects.json')
           .then(res => res.json())
           .then(data => { this.projects = data; });
-        this.loadMarkdown();
+
+        fetch('reflection.md')
+          .then(res => res.text())
+          .then(md => { document.getElementById('reflection-content').innerHTML = marked.parse(md); });
+
+        fetch('vision.md')
+          .then(res => res.text())
+          .then(md => { document.getElementById('vision-content').innerHTML = marked.parse(md); });
       }
     }).mount('#app');
   </script>
