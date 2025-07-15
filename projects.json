@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Project A",
+    "image": "https://via.placeholder.com/400x200",
+    "desc_en": "Unit on sustainability and environment",
+    "desc_zh": "关于环境与可持续的单元",
+    "detail_en": "This project helps students explore sustainability topics through Mandarin.",
+    "detail_zh": "该项目帮助学生通过中文学习探讨可持续性主题。"
+  },
+  {
+    "title": "Project B",
+    "image": "https://via.placeholder.com/400x200",
+    "desc_en": "Culture & Identity project",
+    "desc_zh": "文化与身份探究项目",
+    "detail_en": "Students analyze cultural elements and reflect on their identity.",
+    "detail_zh": "学生分析文化元素并反思自我认同。"
+  },
+  {
+    "title": "Project C",
+    "image": "https://via.placeholder.com/400x200",
+    "desc_en": "Language & Technology Integration",
+    "desc_zh": "语言与科技整合项目",
+    "detail_en": "Combining programming with language learning for creative expression.",
+    "detail_zh": "结合编程与语言学习，促进学生创意表达。"
+  }
+]
