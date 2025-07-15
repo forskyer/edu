@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IB Teacher Portfolio</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body class="bg-emerald-50 text-gray-800">
@@ -110,6 +110,7 @@
     </main>
   </div>
 
+  <!-- Vue + Logic -->
   <script>
     const { createApp } = Vue;
     const messages = {
@@ -128,7 +129,7 @@
         about: '个人简介', aboutText: 'IB 中学项目中文教师，热衷于探究式学习。',
         education: '教育背景与教学经历', edu1: '国际教育硕士', edu2: '5年MYP和DP教学经验',
         skills: '教学技能与工具', skill1: '课程设计', skill2: '评估策略',
-        projects: '所教课程与项目', details: '详细',
+        projects: '所教课程与项目', details: '详细内容',
         pd: '专业成长', pd1: 'IB 第二类工作坊 - ATL', pd2: '2024年全球教育大会',
         reflection: '教学反思', vision: '探索与愿景', contact: '联系方式',
         aboutNav: '简介', educationNav: '教育', skillsNav: '技能',
@@ -158,12 +159,25 @@
       methods: {
         toggleLang() {
           this.lang = this.lang === 'en' ? 'zh' : 'en';
+          this.loadMarkdown(); // 切换语言时，重新加载 Markdown
         },
         t(key) {
           return messages[this.lang][key] || key;
         },
         openModal(index) {
           this.activeProject = index;
+        },
+        loadMarkdown() {
+          fetch(`reflection_${this.lang}.md`)
+            .then(res => res.text())
+            .then(md => {
+              document.getElementById('reflection-content').innerHTML = marked.parse(md);
+            });
+          fetch(`vision_${this.lang}.md`)
+            .then(res => res.text())
+            .then(md => {
+              document.getElementById('vision-content').innerHTML = marked.parse(md);
+            });
         }
       },
       mounted() {
@@ -171,13 +185,7 @@
           .then(res => res.json())
           .then(data => { this.projects = data; });
 
-        fetch('reflection.md')
-          .then(res => res.text())
-          .then(md => { document.getElementById('reflection-content').innerHTML = marked.parse(md); });
-
-        fetch('vision.md')
-          .then(res => res.text())
-          .then(md => { document.getElementById('vision-content').innerHTML = marked.parse(md); });
+        this.loadMarkdown();
       }
     }).mount('#app');
   </script>
